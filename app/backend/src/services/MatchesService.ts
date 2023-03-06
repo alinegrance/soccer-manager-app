@@ -50,4 +50,13 @@ export default class MatchesService {
     );
     return updated;
   }
+
+  public static async createMatch(match: Match) {
+    const { homeTeamId, awayTeamId, homeTeamGoals, awayTeamGoals } = match;
+
+    const newMatch = await Match
+      .create({ homeTeamId, awayTeamId, homeTeamGoals, awayTeamGoals, inProgress: true });
+
+    return newMatch;
+  }
 }

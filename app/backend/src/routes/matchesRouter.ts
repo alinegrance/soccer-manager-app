@@ -9,4 +9,7 @@ router.get('/', MatchesController.getAll);
 router.patch('/:id/finish', validateToken, MatchesController.finishMatch);
 
 router.patch('/:id', validateToken, MatchesController.updateMatch);
+
+router.post('/', validateToken, MatchesController.createMatch);
+
 export default router;
