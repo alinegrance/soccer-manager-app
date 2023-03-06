@@ -12,6 +12,7 @@ const validateToken = (req: Request, res: Response, next: NextFunction) => {
   }
   try {
     const jwtPayload = jwt.verify(token, secret);
+    console.log(jwtPayload);
     req.body = jwtPayload;
     next();
   } catch (err) {

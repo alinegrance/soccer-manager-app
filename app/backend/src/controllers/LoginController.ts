@@ -9,13 +9,14 @@ export default class LoginController {
     if (!user) {
       return res.status(401).send({ message: 'Invalid email or password' });
     }
-    const token = createToken(user);
+    const token = createToken(user.id);
     res.status(200).send({ token });
   }
 
   public static async getRole(req: Request, res: Response) {
-    const { data: { userId } } = req.body;
+    const { data: { user: { id: userId } } } = req.body;
     const user = await UserService.getById(userId);
+    console.log(user);
     return res.status(200).send({ role: user?.role });
   }
 }
