@@ -54,9 +54,12 @@ export default class MatchesService {
   public static async createMatch(match: Match) {
     const { homeTeamId, awayTeamId, homeTeamGoals, awayTeamGoals } = match;
 
-    const newMatch = await Match
-      .create({ homeTeamId, awayTeamId, homeTeamGoals, awayTeamGoals, inProgress: true });
-
-    return newMatch;
+    try {
+      const newMatch = await Match
+        .create({ homeTeamId, awayTeamId, homeTeamGoals, awayTeamGoals, inProgress: true });
+      return newMatch;
+    } catch (e) {
+      throw new Error('There is no team with such id!');
+    }
   }
 }

@@ -44,8 +44,13 @@ export default class MatchesController {
         message: 'It is not possible to create a match with two equal teams',
       });
     }
-    const newMatch = await MatchesService.createMatch(match);
 
-    res.status(201).send(newMatch);
+    try {
+      const newMatch = await MatchesService.createMatch(match);
+      return res.status(201).send(newMatch);
+    } catch (e) {
+      const err = e as Error;
+      return res.status(404).send({ message: err.message });
+    }
   }
 }
