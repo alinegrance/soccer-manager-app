@@ -61,9 +61,5 @@ describe('Test teams', () => {
     chaiHttpResponse = await chai.request(app).get('/login/role').set('authorization', 'umtokenválidomuitolongoaqui');
 
     expect(chaiHttpResponse.body).to.be.deep.equal(userRole);
-
-
-  })
-
-
+  });
 });
