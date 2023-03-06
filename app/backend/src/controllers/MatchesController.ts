@@ -5,7 +5,7 @@ export default class MatchesController {
   public static async getAll(req: Request, res: Response) {
     const { inProgress } = req.query;
 
-    console.log(inProgress);
+    // console.log(inProgress);
 
     if (inProgress === undefined) {
       const matches = await MatchesService.getAll();
@@ -34,6 +34,6 @@ export default class MatchesController {
     const { homeTeamGoals, awayTeamGoals } = req.body;
     await MatchesService.updateMatch(Number(id), homeTeamGoals, awayTeamGoals);
 
-    res.status(200).send('ok');
+    res.status(200).send(req.body);
   }
 }

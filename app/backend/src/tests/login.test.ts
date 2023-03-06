@@ -50,7 +50,7 @@ describe('Test teams', () => {
   });
 
   it('tests if endpoint "/login/role" returns user role when token is valid', async () => {
-    const jwtPayload =  {data: { userId: 1 }, iat: 1678053337, exp: 1678658137 }
+    const jwtPayload =  {data: { user: { id: 1} }, iat: 1678053337, exp: 1678658137 }
     
     sinon.stub(jwt, "verify").callsFake((token, secret)=>{
       return jwtPayload;

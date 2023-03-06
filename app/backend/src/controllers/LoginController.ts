@@ -14,9 +14,9 @@ export default class LoginController {
   }
 
   public static async getRole(req: Request, res: Response) {
-    const { data: { user: { id: userId } } } = req.body;
+    const { jwtPayload } = res.locals;
+    const { data: { user: { id: userId } } } = jwtPayload;
     const user = await UserService.getById(userId);
-    console.log(user);
     return res.status(200).send({ role: user?.role });
   }
 }

@@ -12,8 +12,7 @@ const validateToken = (req: Request, res: Response, next: NextFunction) => {
   }
   try {
     const jwtPayload = jwt.verify(token, secret);
-    console.log(jwtPayload);
-    req.body = jwtPayload;
+    res.locals.jwtPayload = jwtPayload;
     next();
   } catch (err) {
     return res.status(401).send({ message: 'Token must be a valid token' });
