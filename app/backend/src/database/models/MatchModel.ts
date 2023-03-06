@@ -53,9 +53,12 @@ Match.init(
   },
 );
 
-Match.hasMany(Team);
-Team.belongsTo(Match);
+Match.belongsTo(Team, { foreignKey: 'homeTeamId', as: 'homeTeam' });
+Match.belongsTo(Team, { foreignKey: 'awayTeamId', as: 'awayTeam' });
 
+// Team.hasMany(Match);
+
+export default Match;
 // OtherModel.belongsTo(Example, { foreignKey: 'campoA', as: 'campoEstrangeiroA' });
 // OtherModel.belongsTo(Example, { foreignKey: 'campoB', as: 'campoEstrangeiroB' });
 
