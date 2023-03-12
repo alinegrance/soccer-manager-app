@@ -25,4 +25,18 @@ export default class LeaderboardService {
 
     return leaderboard.getAllTeamsStatistics();
   }
+
+  public static order(teamsStatistics: TeamStatistics[]) {
+    return teamsStatistics.sort((a:TeamStatistics, b:TeamStatistics):number => {
+      const comparisons:number[] = [
+        b.totalPoints - a.totalPoints,
+        b.totalVictories - a.totalVictories,
+        b.goalsBalance - a.goalsBalance,
+        b.goalsFavor - a.goalsFavor,
+        a.goalsOwn - b.goalsOwn,
+      ];
+
+      return comparisons.find((comparison) => comparison !== 0) || 0;
+    });
+  }
 }

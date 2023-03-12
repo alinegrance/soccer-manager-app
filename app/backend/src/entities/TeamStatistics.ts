@@ -97,4 +97,12 @@ export default class TeamStatistics {
   public get goalsOwn() {
     return this._goalsOwn;
   }
+
+  public get goalsBalance() {
+    return this._goalsBalance;
+  }
+
+  public get efficiency() {
+    return this._efficiency;
+  }
 }

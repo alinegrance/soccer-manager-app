@@ -9,7 +9,10 @@ export default class LeaderboardController {
     const matches = await MatchesService.getAllFinished();
     const homeTeamsStatistics = new LeaderboardService(matches as MatchEntity[]).home();
 
+    const orderedHomeTeamsStatistics = LeaderboardService.order(homeTeamsStatistics);
+
     res.status(200)
-      .send(homeTeamsStatistics.map((teamStatistics) => new TeamStatisticsDTO(teamStatistics)));
+      .send(orderedHomeTeamsStatistics
+        .map((teamStatistics) => new TeamStatisticsDTO(teamStatistics)));
   }
 }
