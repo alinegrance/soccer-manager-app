@@ -15,4 +15,15 @@ export default class LeaderboardController {
       .send(orderedHomeTeamsStatistics
         .map((teamStatistics) => new TeamStatisticsDTO(teamStatistics)));
   }
+
+  public static async getAwayLeaderboard(req: Request, res:Response) {
+    const matches = await MatchesService.getAllFinished();
+    const awayTeamsStatistics = new LeaderboardService(matches as MatchEntity[]).away();
+
+    const orderedAwayTeamsStatistics = LeaderboardService.order(awayTeamsStatistics);
+
+    res.status(200)
+      .send(orderedAwayTeamsStatistics
+        .map((teamStatistics) => new TeamStatisticsDTO(teamStatistics)));
+  }
 }

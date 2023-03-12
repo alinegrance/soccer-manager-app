@@ -2,6 +2,12 @@ import Leaderboard from '../entities/Leaderboard';
 import TeamStatistics from '../entities/TeamStatistics';
 import MatchEntity from '../entities/MatchEntity';
 
+type TeamGoals = {
+  teamName:string;
+  goalsFavor:number;
+  goalsOwn:number;
+};
+
 export default class LeaderboardService {
   private _matches:MatchEntity[];
 
@@ -9,21 +15,44 @@ export default class LeaderboardService {
     this._matches = matches;
   }
 
-  private static _updateHomeTeamStatistics(leaderboard:Leaderboard, match:MatchEntity):Leaderboard {
-    const { homeTeam: { teamName: homeTeamName }, homeTeamGoals, awayTeamGoals } = match;
+  private static _updateTeamStatistics(
+    leaderboard:Leaderboard,
+    match:MatchEntity,
+    extractFn:(m:MatchEntity) => TeamGoals,
+  ):Leaderboard {
+    const { teamName, goalsFavor, goalsOwn } = extractFn(match);
 
-    const teamStatistics = leaderboard.getTeamStatisticsOrDefault(homeTeamName);
+    const teamStatistics = leaderboard.getTeamStatisticsOrDefault(teamName);
 
-    teamStatistics.update(homeTeamGoals, awayTeamGoals);
+    teamStatistics.update(goalsFavor, goalsOwn);
 
     return leaderboard;
   }
 
-  public home():TeamStatistics[] {
+  private _getTeamsStatistics(extractFn:(m:MatchEntity) => TeamGoals) {
     const leaderboard = this._matches
-      .reduce(LeaderboardService._updateHomeTeamStatistics, new Leaderboard());
+      .reduce((acc, m) =>
+        LeaderboardService._updateTeamStatistics(acc, m, extractFn), new Leaderboard());
 
     return leaderboard.getAllTeamsStatistics();
+  }
+
+  public home():TeamStatistics[] {
+    const extractHomeFn = (match:MatchEntity) =>
+      ({ teamName: match.homeTeam.teamName,
+        goalsFavor: match.homeTeamGoals,
+        goalsOwn: match.awayTeamGoals });
+
+    return this._getTeamsStatistics(extractHomeFn);
+  }
+
+  public away():TeamStatistics[] {
+    const extractAwayFn = (match:MatchEntity) =>
+      ({ teamName: match.awayTeam.teamName,
+        goalsFavor: match.awayTeamGoals,
+        goalsOwn: match.homeTeamGoals });
+
+    return this._getTeamsStatistics(extractAwayFn);
   }
 
   public static order(teamsStatistics: TeamStatistics[]) {
