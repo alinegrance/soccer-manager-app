@@ -1,18 +1,20 @@
 import Team from '../database/models/TeamModel';
 import Match from '../database/models/MatchModel';
+import MatchEntity from '../entities/MatchEntity';
 
 export default class MatchesService {
-  public static async getAll():Promise<Match[]> {
+  public static async getAll():Promise<Match[] | MatchEntity[]> {
     const matches = await Match.findAll({
       include: [
         { model: Team, as: 'homeTeam', attributes: { exclude: ['id'] } },
         { model: Team, as: 'awayTeam', attributes: { exclude: ['id'] } },
       ],
     });
+
     return matches;
   }
 
-  public static async getAllInProgress(): Promise<Match[]> {
+  public static async getAllInProgress(): Promise<Match[] | MatchEntity[]> {
     const matchesInProgress = await Match.findAll({
       where: { inProgress: true },
       include: [
@@ -24,7 +26,7 @@ export default class MatchesService {
     return matchesInProgress;
   }
 
-  public static async getAllFinished(): Promise<Match[]> {
+  public static async getAllFinished(): Promise<Match[] | MatchEntity[]> {
     const matchesFinished = await Match.findAll({
       where: { inProgress: false },
       include: [
